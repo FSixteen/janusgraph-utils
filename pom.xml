@@ -1,0 +1,184 @@
+<?xml version="1.0"?>
+<project
+ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+ xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <modelVersion>4.0.0</modelVersion>
+
+ <groupId>com.xyshzh</groupId>
+ <artifactId>janusgraph-utils</artifactId>
+ <version>0.0.1</version>
+
+ <name>${project.artifactId}</name>
+ <url>http://www.xyshzh.com</url>
+
+ <properties>
+  <encoding>UTF-8</encoding>
+  <maven.compiler.source>1.8</maven.compiler.source>
+  <maven.compiler.target>1.8</maven.compiler.target>
+  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  <junit.version>4.12</junit.version>
+  <org.janusgraph.version>0.2.0</org.janusgraph.version>
+  <com.google.guava.version>18.0</com.google.guava.version>
+  <org.elasticsearch.version>6.0.0</org.elasticsearch.version>
+  <org.apache.http.version>4.5.3</org.apache.http.version>
+ </properties>
+
+ <dependencies>
+  <!-- junit依赖组件信息 ↓ -->
+  <dependency>
+   <groupId>junit</groupId>
+   <artifactId>junit</artifactId>
+   <version>${junit.version}</version>
+   <scope>test</scope>
+  </dependency>
+  <!-- junit依赖组件信息↑ -->
+
+  <!-- JanusGraph依赖组件信息 ↓ -->
+  <dependency>
+   <groupId>org.janusgraph</groupId>
+   <artifactId>janusgraph-all</artifactId>
+   <version>${org.janusgraph.version}</version>
+   <exclusions>
+    <exclusion>
+     <groupId>org.apache.httpcomponents</groupId>
+     <artifactId>httpclient</artifactId>
+    </exclusion>
+    <exclusion>
+     <groupId>com.google.guava</groupId>
+     <artifactId>guava</artifactId>
+    </exclusion>
+    <exclusion>
+     <groupId>io.netty</groupId>
+     <artifactId>netty-all</artifactId>
+    </exclusion>
+   </exclusions>
+  </dependency>
+  <!-- JanusGraph依赖组件信息↑ -->
+
+
+  <!-- Json依赖组件信息 ↓ -->
+  <dependency>
+   <groupId>net.sf.json-lib</groupId>
+   <artifactId>json-lib</artifactId>
+   <version>2.4</version>
+   <classifier>jdk15</classifier>
+  </dependency>
+  <!-- Json依赖组件信息↑ -->
+
+  <!-- Elasticsearch依赖组件信息 ↓ -->
+  <dependency>
+   <groupId>org.elasticsearch</groupId>
+   <artifactId>elasticsearch</artifactId>
+   <version>${org.elasticsearch.version}</version>
+  </dependency>
+  <dependency>
+   <groupId>org.elasticsearch.client</groupId>
+   <artifactId>transport</artifactId>
+   <version>${org.elasticsearch.version}</version>
+   <exclusions>
+    <exclusion>
+     <groupId>org.elasticsearch</groupId>
+     <artifactId>elasticsearch</artifactId>
+    </exclusion>
+    <exclusion>
+     <groupId>io.netty</groupId>
+     <artifactId>netty-all</artifactId>
+    </exclusion>
+   </exclusions>
+  </dependency>
+  <!-- Elasticsearch依赖组件信息↑ -->
+
+  <dependency>
+   <groupId>org.apache.httpcomponents</groupId>
+   <artifactId>httpclient</artifactId>
+   <version>${org.apache.http.version}</version>
+  </dependency>
+  <dependency>
+   <groupId>com.google.guava</groupId>
+   <artifactId>guava</artifactId>
+   <version>${com.google.guava.version}</version>
+  </dependency>
+  <dependency>
+   <groupId>io.netty</groupId>
+   <artifactId>netty-all</artifactId>
+   <version>4.1.26.Final</version>
+  </dependency>
+ </dependencies>
+
+ <build>
+  <plugins>
+   <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-dependency-plugin</artifactId>
+    <version>2.8</version>
+    <executions>
+     <execution>
+      <phase>package</phase>
+      <goals>
+       <goal>copy-dependencies</goal>
+      </goals>
+     </execution>
+    </executions>
+   </plugin>
+   <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-assembly-plugin</artifactId>
+    <version>3.0.0</version>
+    <configuration>
+     <descriptorRefs>
+      <descriptorRef>jar-with-dependencies</descriptorRef>
+     </descriptorRefs>
+     <archive>
+      <manifest>
+       <mainClass></mainClass>
+      </manifest>
+     </archive>
+    </configuration>
+    <executions>
+     <execution>
+      <id>make-assembly</id>
+      <phase>package</phase>
+      <goals>
+       <goal>single</goal>
+      </goals>
+     </execution>
+    </executions>
+   </plugin>
+   <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-source-plugin</artifactId>
+    <version>3.0.1</version>
+    <executions>
+     <execution>
+      <id>attach-sources</id>
+      <phase>verify</phase>
+      <goals>
+       <goal>jar-no-fork</goal>
+      </goals>
+     </execution>
+    </executions>
+   </plugin>
+   <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-javadoc-plugin</artifactId>
+    <version>2.10.4</version>
+    <configuration>
+     <encoding>UTF-8</encoding>
+     <aggregate>true</aggregate>
+     <charset>UTF-8</charset>
+     <docencoding>UTF-8</docencoding>
+    </configuration>
+    <executions>
+     <execution>
+      <id>attach-javadocs</id>
+      <goals>
+       <goal>jar</goal>
+      </goals>
+     </execution>
+    </executions>
+   </plugin>
+  </plugins>
+ </build>
+
+</project>
+ 

@@ -1,0 +1,42 @@
+{
+	"props": [{
+		"name": "uid",
+		"type": "String"
+	}, {
+		"name": "name",
+		"type": "String"
+	}, {
+		"name": "other",
+		"type": "String"
+	}],
+	"vertices": [{
+		"name": "PERSON"
+	}, {
+		"name": "COMPANY"
+	}, {
+		"name": "DEPARTMENT"
+	}],
+	"edges": [{
+		"name": "Kinship",
+		"multiplicity": "MULTI"
+	}, {
+		"name": "Own",
+		"multiplicity": "MULTI"
+	}, {
+		"name": "Serve",
+		"multiplicity": "MULTI"
+	}],
+	"indexes": [{
+		"name": "all_vertex",
+		"type": "Vertex",
+		"consistencyModifier": "DEFAULT",
+		"props": [{
+			"name": "uid",
+			"mapping": "STRING"
+		}],
+		"uniqueIndex": false,
+		"compositeIndex": false,
+		"mixedIndex": false,
+		"mixedIndexName": "search"
+	}]
+}

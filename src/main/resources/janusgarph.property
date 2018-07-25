@@ -1,0 +1,15 @@
+graph.set-vertex-id=true
+gremlin.graph=org.janusgraph.core.JanusGraphFactory
+storage.backend=hbase
+storage.hostname=127.0.0.1
+storage.hbase.table=GL:Graph1
+
+cache.db-cache=true
+cache.db-cache-clean-wait=20
+cache.db-cache-time=180000
+cache.db-cache-size=0.5
+
+index.search.backend=elasticsearch
+index.search.hostname=127.0.0.1,127.0.0.1
+index.search.port=9200
+index.search.elasticsearch.client-only=false
