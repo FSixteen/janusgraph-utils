@@ -10,6 +10,6 @@ cache.db-cache-time=180000
 cache.db-cache-size=0.5
 
 index.search.backend=elasticsearch
-index.search.hostname=127.0.0.1,127.0.0.1
+index.search.hostname=127.0.0.1
 index.search.port=9200
 index.search.elasticsearch.client-only=false
