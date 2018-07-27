@@ -50,21 +50,31 @@
 		"name": "Department"
 	}],
 	"edges": [{
-		"name": "INVEST_H"
+		"name": "INVEST_H",
+		"multiplicity": "MULTI"
 	}, {
-		"name": "INVEST_O"
+		"name": "INVEST_O",
+		"multiplicity": "MULTI"
 	}, {
-		"name": "KINSHIP"
+		"name": "KINSHIP",
+		"multiplicity": "MULTI"
 	}, {
-		"name": "OWN"
+		"name": "OWN",
+		"multiplicity": "MULTI"
 	}, {
-		"name": "PAYMENT"
+		"name": "PAYMENT",
+		"multiplicity": "MULTI"
 	}, {
-		"name": "SERVE"
+		"name": "PAYMENT",
+		"multiplicity": "MULTI"
+	}, {
+		"name": "SERVE",
+		"multiplicity": "MULTI"
 	}],
 	"indexes": [{
 		"name": "all_vertex1",
 		"type": "Vertex",
+		"consistencyModifier": "DEFAULT",
 		"props": [{
 			"name": "uid",
 			"mapping": "TEXTSTRING"
@@ -72,13 +82,14 @@
 			"name": "uid",
 			"mapping": "TEXTSTRING"
 		}],
-		"uniqueIndex": false,
-		"compositeIndex": false,
+		"uniqueIndex": true,
+		"compositeIndex": true,
 		"mixedIndex": true,
 		"mixedIndexName": "search"
 	}, {
 		"name": "all_edge1",
 		"type": "Edge",
+		"consistencyModifier": "DEFAULT",
 		"props": [{
 			"name": "uid",
 			"mapping": "TEXTSTRING"
@@ -86,8 +97,8 @@
 			"name": "uid",
 			"mapping": "TEXTSTRING"
 		}],
-		"uniqueIndex": false,
-		"compositeIndex": false,
+		"uniqueIndex": true,
+		"compositeIndex": true,
 		"mixedIndex": true,
 		"mixedIndexName": "search"
 	}]

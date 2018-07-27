@@ -1,53 +1,43 @@
 package com.xyshzh.janusgraph.test;
 
-import java.util.Arrays;
-import java.util.List;
+import java.io.FileNotFoundException;
 
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
-import org.janusgraph.core.Multiplicity;
-import org.janusgraph.core.schema.ConsistencyModifier;
 
 import com.google.gson.Gson;
 import com.xyshzh.janusgraph.core.GraphFactory;
-import com.xyshzh.janusgraph.schema.entity.EdgeLabelKey;
-import com.xyshzh.janusgraph.schema.entity.IndexKey;
-import com.xyshzh.janusgraph.schema.entity.IndexPropertyKey;
+import com.xyshzh.janusgraph.datasource.ReadFile;
 import com.xyshzh.janusgraph.schema.entity.PropertyKey;
 import com.xyshzh.janusgraph.schema.entity.Schema;
-import com.xyshzh.janusgraph.schema.entity.VertexLabelKey;
 import com.xyshzh.janusgraph.schema.enuminfo.DataType;
-import com.xyshzh.janusgraph.schema.enuminfo.IndexType;
-import com.xyshzh.janusgraph.schema.enuminfo.Mapping;
 
 public class Test {
 
   @org.junit.Test
+  public void testBoolean() throws FileNotFoundException {
+    System.out.println(Boolean.valueOf("true"));
+    System.out.println(Boolean.valueOf("false"));
+    System.out.println(Boolean.valueOf("true") == true);
+    System.out.println(Boolean.valueOf("false") == false);
+  }
+
+  @org.junit.Test
+  public void h() {
+    // [birthday, reg_person, pageRank, address, sex, type, uid, ~label, ctype, name, ~id, tag, time, state, updatetime, timestamp]
+    ReadFile reader = new ReadFile("./V.txt");
+    String tempString = null; // 接收文件中每行数据,使用一变量,不需要重新生成新变量
+    java.util.HashSet set = new java.util.HashSet();
+    while ((tempString = reader.readLine()) != null) {
+      net.sf.json.JSONObject content = null;
+      content = net.sf.json.JSONObject.fromObject(tempString);
+      content.keySet().forEach(k -> set.add(k.toString()));
+    }
+    System.out.println(set);
+  }
+
+  @org.junit.Test
   public void indexTest() {
-    Schema schema = new Schema();
-
-    List<PropertyKey> p = Arrays.asList(new PropertyKey[] { new PropertyKey("uid", DataType.String),
-        new PropertyKey("name", DataType.String), new PropertyKey("other", DataType.String) });
-
-    schema.setProps(p);
-
-    List<VertexLabelKey> v = Arrays.asList(new VertexLabelKey[] { new VertexLabelKey("PERSON"),
-        new VertexLabelKey("COMPANY"), new VertexLabelKey("DEPARTMENT") });
-
-    schema.setVertices(v);
-
-    List<EdgeLabelKey> e = Arrays.asList(new EdgeLabelKey[] { new EdgeLabelKey("Kinship", Multiplicity.MULTI, null),
-        new EdgeLabelKey("Own", Multiplicity.MULTI, null), new EdgeLabelKey("Serve", Multiplicity.MULTI, null) });
-
-    schema.setEdges(e);
-
-    List<IndexKey> i = Arrays
-        .asList(new IndexKey[] { new IndexKey("all_vertex", IndexType.Vertex, ConsistencyModifier.DEFAULT,
-            Arrays.asList(new IndexPropertyKey[] { new IndexPropertyKey("uid", Mapping.STRING) }), false, false, false,
-            "search") });
-
-    schema.setIndexes(i);
-
-    System.out.println(new Gson().toJson(schema));
+    System.out.println(new Gson().toJson(Schema.getTest()));
   }
 
   @org.junit.Test

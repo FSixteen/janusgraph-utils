@@ -9,3 +9,8 @@
 - 外部索引不能是唯一索引。
 - 复合索引中PropertKey不能存在Parameter.
 - 外部索引中PropertKey可以存在或不存在Parameter.
+
+# 功能流程图
+![功能流程图](./img/843a66a18edb725a8f61cd0563f5e17.png)
+
+# 数据校验流程图

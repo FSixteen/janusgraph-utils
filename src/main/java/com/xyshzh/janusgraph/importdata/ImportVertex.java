@@ -1,5 +1,7 @@
 package com.xyshzh.janusgraph.importdata;
 
+import com.xyshzh.janusgraph.task.Task;
+
 /**
  * 每类用于通过文本文档向JanusGraph导入数据.
  * 文档内容大体如下:
@@ -10,11 +12,9 @@ package com.xyshzh.janusgraph.importdata;
  * @version 2018-01-16
  *
  */
-public class ImportVertex {
-  public static void main(String[] args) {
-
-    // 简单的将参数生成Map集合.
-    java.util.HashMap<String, Object> options = com.xyshzh.janusgraph.utils.ArgsUtils.initOptions(args);
+public class ImportVertex implements Task{
+  
+  public void execute(java.util.HashMap<String, String> options) {
 
     // 试图打开文件,文件使用结束后或出现异常后,在finally内关闭文件
     com.xyshzh.janusgraph.datasource.Read reader = new com.xyshzh.janusgraph.datasource.ReadFile(

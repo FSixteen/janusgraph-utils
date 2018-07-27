@@ -3,6 +3,8 @@ package com.xyshzh.janusgraph.importdata;
 import org.apache.tinkerpop.gremlin.structure.Edge;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 
+import com.xyshzh.janusgraph.task.Task;
+
 /**
  * 
  * {"outVertexId":1,"inVertexId":2,"label":"OWN","key1":"value1","key2":"value2","key3":"value3"}
@@ -13,12 +15,9 @@ import org.apache.tinkerpop.gremlin.structure.Vertex;
  * @version 2018-01-16
  *
  */
-public class ImportEdge {
+public class ImportEdge implements Task{
 
-  public static void main(String[] args) {
-
-    // 简单的将参数生成Map集合.
-    java.util.HashMap<String, Object> options = com.xyshzh.janusgraph.utils.ArgsUtils.initOptions(args);
+  public void execute(java.util.HashMap<String, String> options) {
 
     // 试图打开文件,文件使用结束后或出现异常后,在finally内关闭文件
     com.xyshzh.janusgraph.datasource.Read reader = new com.xyshzh.janusgraph.datasource.ReadFile(

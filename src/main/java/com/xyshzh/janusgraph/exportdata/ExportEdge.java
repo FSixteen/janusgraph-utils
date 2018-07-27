@@ -1,22 +1,24 @@
 package com.xyshzh.janusgraph.exportdata;
 
+import com.xyshzh.janusgraph.task.Task;
+
 /**
  * JanusGraph图数据库中导出全量Edge信息.
  * @author Shengjun Liu
  * @version 2018-07-21
  *
  */
-public class ExportEdge {
-  public static void main(String[] args) {
+public class ExportEdge implements Task {
+  public void execute(java.util.HashMap<String, String> options) {
 
     // 试图打开文件,文件使用结束后或出现异常后,在finally内关闭文件
-    com.xyshzh.janusgraph.datasource.WriterFile writer = new com.xyshzh.janusgraph.datasource.WriterFile("./E.txt");
-    
+    com.xyshzh.janusgraph.datasource.WriterFile writer = new com.xyshzh.janusgraph.datasource.WriterFile(options.get("file"));
+
     if (!writer.check()) { // 检测数据源
       System.out.println("文件异常,请重试.");
       System.exit(0);
     }
-    
+
     java.util.concurrent.atomic.AtomicInteger total = new java.util.concurrent.atomic.AtomicInteger(0); // 计数器
     com.xyshzh.janusgraph.core.GraphFactory graphFactory = new com.xyshzh.janusgraph.core.GraphFactory(); // 创建图数据库连接
     org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g = graphFactory.getG(); // 获取遍历源,判断是否存在使用
@@ -29,7 +31,8 @@ public class ExportEdge {
           for (String key : v.keys()) { // 处理所有属性
             prop.put(key, v.value(key));
           }
-          org.janusgraph.graphdb.relations.RelationIdentifier id = (org.janusgraph.graphdb.relations.RelationIdentifier) v.id();
+          org.janusgraph.graphdb.relations.RelationIdentifier id = (org.janusgraph.graphdb.relations.RelationIdentifier) v
+              .id();
           prop.put("~relationId", id.getRelationId()); // 添加关系id
           prop.put("~inVertexId", id.getInVertexId()); // 添加终点id
           prop.put("~outVertexId", id.getOutVertexId()); // 添加起点id
@@ -58,8 +61,8 @@ public class ExportEdge {
       }
       writer.close(); // 关闭文件
     }
-    
+
     System.out.println("I'm OK!");
-    
+
   }
 }

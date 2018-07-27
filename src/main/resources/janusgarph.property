@@ -1,15 +1,24 @@
+## Gremlin基本配置 ↓
 graph.set-vertex-id=true
 gremlin.graph=org.janusgraph.core.JanusGraphFactory
 storage.backend=hbase
+# Zookeeper连接地址
 storage.hostname=127.0.0.1
+# Hbase表名, GL是表空间: > list_namespace 创建: > create_namespace ''
 storage.hbase.table=GL:Graph1
+storage.hbase.ext.zookeeper.znode.parent=/hbase
+# storage.hbase.ext.....
 
+## Gremlin缓存配置 ↓
 cache.db-cache=true
 cache.db-cache-clean-wait=20
 cache.db-cache-time=180000
 cache.db-cache-size=0.5
 
+## 外部索引 ↓
 index.search.backend=elasticsearch
+# ES 的IP地址
 index.search.hostname=127.0.0.1
+# ES 的Port端口
 index.search.port=9200
 index.search.elasticsearch.client-only=false

@@ -88,8 +88,14 @@ public class Schema {
   public static Schema getTest() {
     Schema schema = new Schema();
 
-    List<PropertyKey> p = Arrays.asList(new PropertyKey[] { new PropertyKey("uid", DataType.String),
-        new PropertyKey("name", DataType.String), new PropertyKey("birthday", DataType.String) });
+    List<PropertyKey> p = Arrays
+        .asList(new PropertyKey[] { new PropertyKey("uid", DataType.String), new PropertyKey("name", DataType.String),
+            new PropertyKey("birthday", DataType.String), new PropertyKey("reg_person", DataType.String),
+            new PropertyKey("pageRank", DataType.Double), new PropertyKey("address", DataType.String),
+            new PropertyKey("sex", DataType.String), new PropertyKey("type", DataType.String),
+            new PropertyKey("ctype", DataType.String), new PropertyKey("tag", DataType.String),
+            new PropertyKey("time", DataType.String), new PropertyKey("state", DataType.String),
+            new PropertyKey("updatetime", DataType.Long), new PropertyKey("timestamp", DataType.Long) });
 
     schema.setProps(p);
 
@@ -98,15 +104,22 @@ public class Schema {
 
     schema.setVertices(v);
 
-    List<EdgeLabelKey> e = Arrays.asList(new EdgeLabelKey[] { new EdgeLabelKey("Kinship", Multiplicity.MULTI, null),
-        new EdgeLabelKey("Own", Multiplicity.MULTI, null), new EdgeLabelKey("Serve", Multiplicity.MULTI, null) });
+    List<EdgeLabelKey> e = Arrays.asList(new EdgeLabelKey[] { new EdgeLabelKey("INVEST_H", Multiplicity.MULTI, null),
+        new EdgeLabelKey("INVEST_O", Multiplicity.MULTI, null), new EdgeLabelKey("KINSHIP", Multiplicity.MULTI, null),
+        new EdgeLabelKey("OWN", Multiplicity.MULTI, null), new EdgeLabelKey("PAYMENT", Multiplicity.MULTI, null),
+        new EdgeLabelKey("PAYMENT", Multiplicity.MULTI, null), new EdgeLabelKey("SERVE", Multiplicity.MULTI, null) });
 
     schema.setEdges(e);
 
-    List<IndexKey> i = Arrays
-        .asList(new IndexKey[] { new IndexKey("all_vertex1", IndexType.Vertex, ConsistencyModifier.DEFAULT,
-            Arrays.asList(new IndexPropertyKey[] { new IndexPropertyKey("uid", Mapping.STRING) }), true, true, true,
-            "search") });
+    List<IndexKey> i = Arrays.asList(new IndexKey[] {
+        new IndexKey("all_vertex1", IndexType.Vertex, ConsistencyModifier.DEFAULT,
+            Arrays.asList(new IndexPropertyKey[] { new IndexPropertyKey("uid", Mapping.TEXTSTRING),
+                new IndexPropertyKey("uid", Mapping.TEXTSTRING) }),
+            true, true, true, "search"),
+        new IndexKey("all_edge1", IndexType.Edge,
+            ConsistencyModifier.DEFAULT, Arrays.asList(new IndexPropertyKey[] {
+                new IndexPropertyKey("uid", Mapping.TEXTSTRING), new IndexPropertyKey("uid", Mapping.TEXTSTRING) }),
+            true, true, true, "search") });
 
     schema.setIndexes(i);
 

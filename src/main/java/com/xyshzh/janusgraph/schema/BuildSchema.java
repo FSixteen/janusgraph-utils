@@ -1,5 +1,7 @@
 package com.xyshzh.janusgraph.schema;
 
+import java.io.FileReader;
+
 import org.janusgraph.core.EdgeLabel;
 import org.janusgraph.core.Multiplicity;
 import org.janusgraph.core.PropertyKey;
@@ -9,9 +11,11 @@ import org.janusgraph.core.schema.EdgeLabelMaker;
 import org.janusgraph.core.schema.JanusGraphIndex;
 import org.janusgraph.core.schema.JanusGraphManagement;
 
+import com.google.gson.GsonBuilder;
 import com.xyshzh.janusgraph.schema.entity.IndexPropertyKey;
 import com.xyshzh.janusgraph.schema.entity.Schema;
 import com.xyshzh.janusgraph.schema.enuminfo.Mapping;
+import com.xyshzh.janusgraph.task.Task;
 
 /**
  * 创建Schema. // 初版,后续完善.
@@ -20,13 +24,14 @@ import com.xyshzh.janusgraph.schema.enuminfo.Mapping;
  * @version 2018-07-25
  *
  */
-public class BuildSchema {
-  public static void main(String[] args) {
+public class BuildSchema implements Task {
+  public void execute(java.util.HashMap<String, String> options) {
     com.xyshzh.janusgraph.core.GraphFactory graphFactory = new com.xyshzh.janusgraph.core.GraphFactory(); // 创建图数据库连接
     JanusGraphManagement mgmt = graphFactory.getGraph().openManagement(); // 获取管理入口
     try {
 
-      Schema schema = Schema.getTest();
+      Schema schema = new GsonBuilder().disableHtmlEscaping().create().fromJson(new FileReader(options.get("file")),
+          Schema.class);
 
       // 初始化属性
       System.out.println("开始初始化属性信息...");
@@ -73,7 +78,8 @@ public class BuildSchema {
         } else {
           EdgeLabelMaker edgeLabelMaker = mgmt.makeEdgeLabel(e.getName());
           edgeLabelMaker.multiplicity((null == e.getMultiplicity()) ? Multiplicity.MULTI : e.getMultiplicity());
-          PropertyKey propertyKey = ((null == e.getSignature() || "".equals(e.getSignature().trim())) ? null : mgmt.getPropertyKey(e.getSignature()));
+          PropertyKey propertyKey = ((null == e.getSignature() || "".equals(e.getSignature().trim())) ? null
+              : mgmt.getPropertyKey(e.getSignature()));
           if (null != propertyKey)
             edgeLabelMaker.signature(propertyKey);
           edgeLabelMaker.make();
@@ -90,8 +96,9 @@ public class BuildSchema {
         // 判断关系类型是否存在
         if (mgmt.containsGraphIndex(i.getName())) {
           JanusGraphIndex hisGraphIndex = mgmt.getGraphIndex(i.getName());
-          System.out.println("已存在  >> " + hisGraphIndex.name() + " :: isUnique=" + hisGraphIndex.isUnique() + " :: isCompositeIndex="
-              + hisGraphIndex.isCompositeIndex() + " :: isMixedIndex=" + hisGraphIndex.isMixedIndex());
+          System.out.println(
+              "已存在  >> " + hisGraphIndex.name() + " :: isUnique=" + hisGraphIndex.isUnique() + " :: isCompositeIndex="
+                  + hisGraphIndex.isCompositeIndex() + " :: isMixedIndex=" + hisGraphIndex.isMixedIndex());
           System.out.println("       >> " + i.getName() + " :: isUnique=" + i.isUniqueIndex() + " :: isCompositeIndex="
               + i.isCompositeIndex() + " :: isMixedIndex=" + i.isMixedIndex());
         } else {
@@ -121,18 +128,21 @@ public class BuildSchema {
           }
           // 创建复合索引
           if (i.isCompositeIndex()) {
-            mgmt.setConsistency(index.buildCompositeIndex(), null == i.getConsistencyModifier() ? ConsistencyModifier.LOCK : i.getConsistencyModifier());
+            mgmt.setConsistency(index.buildCompositeIndex(),
+                null == i.getConsistencyModifier() ? ConsistencyModifier.LOCK : i.getConsistencyModifier());
           }
           // 创建混合索引
           if (i.isMixedIndex()) {
             if (null == i.getMixedIndexName() || "".equals(i.getMixedIndexName().trim())) {
-              System.out.println("未发现后端索引方式  >> " + i.getName() + " :: isMixedIndex=" + i.isMixedIndex() + " :: MixedIndexName=" + i.getMixedIndexName() + " >> 跳过本次索引内容创建. ");
+              System.out.println("未发现后端索引方式  >> " + i.getName() + " :: isMixedIndex=" + i.isMixedIndex()
+                  + " :: MixedIndexName=" + i.getMixedIndexName() + " >> 跳过本次索引内容创建. ");
             } else {
               index.buildMixedIndex(i.getMixedIndexName());
             }
           } else {
-            System.out.println("未发现索引方式  >> " + i.getName() + " :: isUnique=" + i.isUniqueIndex() + " :: isCompositeIndex="
-                + i.isCompositeIndex() + " :: isMixedIndex=" + i.isMixedIndex() + " >> 跳过本次索引内容创建. ");
+            System.out
+                .println("未发现索引方式  >> " + i.getName() + " :: isUnique=" + i.isUniqueIndex() + " :: isCompositeIndex="
+                    + i.isCompositeIndex() + " :: isMixedIndex=" + i.isMixedIndex() + " >> 跳过本次索引内容创建. ");
           }
           System.out.println("已添加  >> " + i.getName());
         }
