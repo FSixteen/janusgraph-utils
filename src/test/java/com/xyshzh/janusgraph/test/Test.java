@@ -1,63 +1,70 @@
 package com.xyshzh.janusgraph.test;
 
-import java.io.FileNotFoundException;
-
-import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource;
-
-import com.google.gson.Gson;
-import com.xyshzh.janusgraph.core.GraphFactory;
-import com.xyshzh.janusgraph.datasource.ReadFile;
-import com.xyshzh.janusgraph.schema.entity.PropertyKey;
-import com.xyshzh.janusgraph.schema.entity.Schema;
-import com.xyshzh.janusgraph.schema.enuminfo.DataType;
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
+import org.apache.tinkerpop.gremlin.structure.Edge;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.janusgraph.core.JanusGraphTransaction;
+import org.janusgraph.core.JanusGraphVertex;
 
 public class Test {
-
+  
   @org.junit.Test
-  public void testBoolean() throws FileNotFoundException {
-    System.out.println(Boolean.valueOf("true"));
-    System.out.println(Boolean.valueOf("false"));
-    System.out.println(Boolean.valueOf("true") == true);
-    System.out.println(Boolean.valueOf("false") == false);
-  }
-
-  @org.junit.Test
-  public void h() {
-    // [birthday, reg_person, pageRank, address, sex, type, uid, ~label, ctype, name, ~id, tag, time, state, updatetime, timestamp]
-    ReadFile reader = new ReadFile("./V.txt");
-    String tempString = null; // 接收文件中每行数据,使用一变量,不需要重新生成新变量
-    java.util.HashSet set = new java.util.HashSet();
-    while ((tempString = reader.readLine()) != null) {
-      net.sf.json.JSONObject content = null;
-      content = net.sf.json.JSONObject.fromObject(tempString);
-      content.keySet().forEach(k -> set.add(k.toString()));
+  public void updateV() {
+    com.xyshzh.janusgraph.core.GraphFactory graphFactory = new com.xyshzh.janusgraph.core.GraphFactory(); // 创建图数据库连接
+    org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g = graphFactory.getG(); // 获取遍历源,判断是否存在使用
+    
+    GraphTraversal<Vertex, Vertex> starts = g.V(1 << 8);
+    
+    Vertex start = null;
+    if(starts.hasNext()) start = starts.next();
+    
+    if(null != start) {
+      start.property("uid", "100000");
+      System.out.println("update");
     }
-    System.out.println(set);
+
+    g.tx().commit();
+    g.tx().open();
+    graphFactory.close();
+  }
+  
+  @org.junit.Test
+  public void insertE() {
+    com.xyshzh.janusgraph.core.GraphFactory graphFactory = new com.xyshzh.janusgraph.core.GraphFactory(); // 创建图数据库连接
+    org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g = graphFactory.getG(); // 获取遍历源,判断是否存在使用
+    
+    GraphTraversal<Vertex, Vertex> starts = g.V(1 << 8);
+    GraphTraversal<Vertex, Vertex> ends = g.V(2 << 8);
+    
+    Vertex start = null;
+    Vertex end = null;
+    if(starts.hasNext()) start = starts.next();
+    if(ends.hasNext()) end = ends.next();
+    
+    if(null != start && null != end) {
+      Edge p = end.addEdge("OWN", start);
+      p.property("uid", "uid-" + Long.valueOf(1 << 8).toString());
+      p.property("name", "name-" + Long.valueOf(1 << 8).toString());
+    }
+    
+    g.tx().commit();
+    g.tx().open();
+    graphFactory.close();
   }
 
   @org.junit.Test
-  public void indexTest() {
-    System.out.println(new Gson().toJson(Schema.getTest()));
+  public void insertV() {
+    com.xyshzh.janusgraph.core.GraphFactory graphFactory = new com.xyshzh.janusgraph.core.GraphFactory(); // 创建图数据库连接
+    JanusGraphTransaction tx = graphFactory.getTx(); // 创建事物
+
+    JanusGraphVertex v1 = tx.addVertex(org.apache.tinkerpop.gremlin.structure.T.label, "Person", org.apache.tinkerpop.gremlin.structure.T.id, 1 << 8);
+    v1.property("uid", "uid-" + Long.valueOf(1 << 8).toString()).property("name", "name-" + Long.valueOf(1 << 8).toString());
+    
+    JanusGraphVertex v2 = tx.addVertex(org.apache.tinkerpop.gremlin.structure.T.label, "Person", org.apache.tinkerpop.gremlin.structure.T.id, 2 << 8);
+    v2.property("uid", "uid-" + Long.valueOf(2 << 8).toString()).property("name", "name-" + Long.valueOf(2 << 8).toString());
+    
+    tx.commit();
+    graphFactory.close();
   }
 
-  @org.junit.Test
-  public void PropertyTestIv() {
-    String data = "{\"name\":\"name\",\"type\":\"Double\"}";
-    PropertyKey p = new Gson().fromJson(data, PropertyKey.class);
-    System.out.println(p.getName() + "  ::  " + p.getType());
-  }
-
-  @org.junit.Test
-  public void PropertyTest() {
-    PropertyKey p = new PropertyKey("name", DataType.Double);
-    System.out.println(new Gson().toJson(p));
-  }
-
-  public static void main(String[] args) throws Exception {
-    GraphFactory graph = new GraphFactory();
-    GraphTraversalSource g = graph.getG();
-    System.out.println(g.V().count().next().longValue());
-    g.close();
-    graph.close();
-  }
 }

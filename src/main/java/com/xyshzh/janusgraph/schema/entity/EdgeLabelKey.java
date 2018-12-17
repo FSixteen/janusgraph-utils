@@ -17,6 +17,7 @@ public class EdgeLabelKey implements Serializable {
   private String name;
   private Multiplicity multiplicity;
   private String signature;
+  private String description;
 
   public EdgeLabelKey() {}
 
@@ -24,6 +25,13 @@ public class EdgeLabelKey implements Serializable {
     this.name = name;
     this.multiplicity = multiplicity;
     this.signature = signature;
+  }
+
+  public EdgeLabelKey(String name, Multiplicity multiplicity, String signature, String description) {
+    this.name = name;
+    this.multiplicity = multiplicity;
+    this.signature = signature;
+    this.description = description;
   }
 
   public String getName() {
@@ -48,6 +56,14 @@ public class EdgeLabelKey implements Serializable {
 
   public void setSignature(String signature) {
     this.signature = signature;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 
 }

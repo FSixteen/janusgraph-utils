@@ -1,94 +1,21 @@
-{
-	"props": [{
-		"name": "uid",
-		"type": "String"
-	}, {
-		"name": "name",
-		"type": "String"
-	}, {
-		"name": "birthday",
-		"type": "String"
-	}, {
-		"name": "reg_person",
-		"type": "String"
-	}, {
-		"name": "pageRank",
-		"type": "Double"
-	}, {
-		"name": "address",
-		"type": "String"
-	}, {
-		"name": "sex",
-		"type": "String"
-	}, {
-		"name": "type",
-		"type": "String"
-	}, {
-		"name": "ctype",
-		"type": "String"
-	}, {
-		"name": "tag",
-		"type": "String"
-	}, {
-		"name": "time",
-		"type": "String"
-	}, {
-		"name": "state",
-		"type": "String"
-	}, {
-		"name": "updatetime",
-		"type": "Long"
-	}, {
-		"name": "timestamp",
-		"type": "Long"
-	}],
-	"vertices": [{
-		"name": "Person"
-	}, {
-		"name": "Company"
-	}, {
-		"name": "Department"
-	}],
-	"edges": [{
-		"name": "INVEST_H"
-	}, {
-		"name": "INVEST_O"
-	}, {
-		"name": "KINSHIP"
-	}, {
-		"name": "OWN"
-	}, {
-		"name": "PAYMENT"
-	}, {
-		"name": "SERVE"
-	}],
-	"indexes": [{
-		"name": "all_vertex1",
-		"type": "Vertex",
-		"props": [{
-			"name": "uid",
-			"mapping": "TEXTSTRING"
-		}, {
-			"name": "uid",
-			"mapping": "TEXTSTRING"
-		}],
-		"uniqueIndex": false,
-		"compositeIndex": false,
-		"mixedIndex": true,
-		"mixedIndexName": "search"
-	}, {
-		"name": "all_edge1",
-		"type": "Edge",
-		"props": [{
-			"name": "uid",
-			"mapping": "TEXTSTRING"
-		}, {
-			"name": "uid",
-			"mapping": "TEXTSTRING"
-		}],
-		"uniqueIndex": false,
-		"compositeIndex": false,
-		"mixedIndex": true,
-		"mixedIndexName": "search"
-	}]
+{ "props": [
+    { "name": "uid", "type": "String"}, 
+    { "name": "name", "type": "String"}]
+  , "vertices": [
+    { "name": "Person"}, 
+    { "name": "Company"}, 
+    { "name": "Department"}]
+  , "edges": [
+    { "name": "OWN"}, 
+    { "name": "PAYMENT"}, 
+    { "name": "SERVE"}]
+  , "indexes": [
+    { "name": "all_vertex1", "type": "Vertex", "props": [
+        { "name": "uid", "mapping": "TEXTSTRING"}, 
+        { "name": "name", "mapping": "TEXTSTRING"}]
+      , "uniqueIndex": false, "compositeIndex": false, "mixedIndex": true, "mixedIndexName": "search"}, 
+    { "name": "all_edge1", "type": "Edge", "props": [
+        { "name": "uid", "mapping": "TEXTSTRING"}, 
+        { "name": "name", "mapping": "TEXTSTRING"}]
+      , "uniqueIndex": false, "compositeIndex": false, "mixedIndex": true, "mixedIndexName": "search"}]
 }

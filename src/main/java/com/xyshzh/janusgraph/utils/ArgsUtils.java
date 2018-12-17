@@ -95,6 +95,8 @@ public class ArgsUtils {
       if (!options.containsKey("file")) {
         System.out.println("  >>  --file  >>  请指定正确的schema模板文件路径,json文件");
         return showHelp();
+      } else {
+        return true;
       }
     }
     // 导出数据
@@ -108,7 +110,7 @@ public class ArgsUtils {
         return showHelp();
       }
       // 判断导出方式
-      if (!options.containsKey("type") || !Arrays.asList("type", "jdbc").contains(options.get("type"))) { // 未指定导出方式 或 导出方式指定异常
+      if (!options.containsKey("type") || !Arrays.asList("file", "jdbc").contains(options.get("type"))) { // 未指定导出方式 或 导出方式指定异常
         System.out.println("  >>  --type  >>  请选择导出方式");
         return showHelp();
       }
@@ -124,50 +126,43 @@ public class ArgsUtils {
     // 导入数据
     if (options.get("task").equals("import")) {
       // 判断导入类型
-      if ((!options.containsKey("isVertex") && !options.containsKey("isEdge")) // 不包含两个值
-          || (Boolean.valueOf(options.containsKey("isVertex")) && Boolean.valueOf(options.containsKey("isEdge"))) // 包含两个true值
-          || (!Boolean.valueOf(options.containsKey("isVertex")) && !Boolean.valueOf(options.containsKey("isEdge"))) // 包含两个false值
-      ) {
+      if (Boolean.parseBoolean(options.getOrDefault("isVertex", "false")) == Boolean
+          .parseBoolean(options.getOrDefault("isEdge", "false"))) {
         System.out.println("  >>  --isVertex | --isEdge  >>  请选择单一导入方式");
         return showHelp();
       }
-
-    }
-    // 判断导入方式
-    if (!options.containsKey("type") || !Arrays.asList("type", "jdbc").contains(options.get("type"))) { // 未指定导入方式 或 导入方式指定异常
-      System.out.println("  >>  --type  >>  请选择导出方式");
-      return showHelp();
-    }
-    if ("file".equals(options.get("type"))) { // 通过file导入
-      if (!options.containsKey("file")) { // 未指定导入文件
-        System.out.println("  >>  --file  >>  请选择导入文件");
+      // 判断导入方式
+      if (!Arrays.asList("file", "jdbc").contains(options.getOrDefault("type", "Nothing"))) { // 未指定导入方式 或 导入方式指定异常
+        System.out.println("  >>  --type  >>  请选择导出方式");
         return showHelp();
       }
-    } else { // 通过jdbc方式导入
-      ;
+      if ("file".equals(options.get("type"))) { // 通过file导出
+        if (!options.containsKey("file")) { // 未指定导出文件
+          System.out.println("  >>  --file  >>  请选择导出文件");
+          return showHelp();
+        }
+      } else { // 通过jdbc方式导入
+        ;
+      }
+      // 验证方法完善中....
+      if (Boolean.parseBoolean(options.getOrDefault("isVertex", "false"))
+          && Boolean.parseBoolean(options.getOrDefault("checkvertex", "false"))) { // 导入点且校验
+        if (!Boolean.parseBoolean(options.getOrDefault("setvertexid", "false")) // 通过ID校验
+            && !options.containsKey("keys")) { // 通过字段校验
+          System.out.println("检查节点信息,但没有自定义id,也没有指定字段判断节点或关系信息");
+          return showHelp();
+        }
+      }
+      if (Boolean.parseBoolean(options.getOrDefault("isEdge", "false"))
+          && Boolean.parseBoolean(options.getOrDefault("checkedge", "false"))) {
+        if (!Boolean.parseBoolean(options.getOrDefault("setvertexid", "false")) // 通过ID校验
+            && !options.containsKey("fkeys") && !options.containsKey("tkeys")) { // 通过字段校验
+          System.out.println("检查节点信息,但没有自定义id,也没有指定字段判断节点或关系信息");
+          return showHelp();
+        }
+      }
     }
-
-    // 验证方法完善中....
-
-    if (options.containsKey("checkvertex") && !options.containsKey("setvertexid") && !options.containsKey("keys")) {
-      System.out.println("检查节点信息,但没有自定义id,也没有指定字段判断节点或关系信息");
-      return showHelp();
-    } else if (options.containsKey("checkedge") && !options.containsKey("setvertexid")
-        && !options.containsKey("keys")) {
-      System.out.println("检查关系信息,但没有自定义id,也没有指定字段判断节点或关系信息");
-      return showHelp();
-    } else if (!options.containsKey("type")) {
-      System.out.println("没有指定数据来源");
-      return showHelp();
-    } else if (options.get("type").equals("file") && !options.containsKey("file")) {
-      System.out.println("没有指定数据来源文件");
-      return showHelp();
-    } else if (options.get("type").equals("jdbc") && (!options.containsKey("driver") || !options.containsKey("url"))) {
-      System.out.println("没有指定数据来源数据库");
-      return showHelp();
-    } else {
-      return true;
-    }
+    return true;
   }
 
   public static java.util.HashMap<String, String> initOptions(String[] args) {
