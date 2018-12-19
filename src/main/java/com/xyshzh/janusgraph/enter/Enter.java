@@ -15,8 +15,8 @@ import com.xyshzh.janusgraph.schema.BuildSchema;
 public class Enter {
   public static void main(String[] args) {
 
-    args = new String[] { "--conf=/Users/liushengjun/workspace/janusgraph-utils_/src/main/resources/janusgarph.property", "--task=schema",
-        "--file=/Users/liushengjun/workspace/janusgraph-utils_/src/main/resources/schema.json" };
+    args = new String[] { "--task=schema", "--conf=/Users/liushengjun/workspace/janusgraph-utils_/src/main/resources/janusgarph.property",
+        "--file=/Users/liushengjun/workspace/janusgraph-utils_/schema.json" };
 
     // 简单的将参数生成Map集合.
     java.util.HashMap<String, String> options = com.xyshzh.janusgraph.utils.ArgsUtils.initOptions(args);

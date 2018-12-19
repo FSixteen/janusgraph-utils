@@ -32,23 +32,26 @@ public class Test {
   public void insertE() {
     com.xyshzh.janusgraph.core.GraphFactory graphFactory = new com.xyshzh.janusgraph.core.GraphFactory(); // 创建图数据库连接
     org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g = graphFactory.getG(); // 获取遍历源,判断是否存在使用
-    
+    // 先查找起点和终点
     GraphTraversal<Vertex, Vertex> starts = g.V(1 << 8);
     GraphTraversal<Vertex, Vertex> ends = g.V(2 << 8);
-    
+    // 判断起点和终点是否存在
     Vertex start = null;
     Vertex end = null;
     if(starts.hasNext()) start = starts.next();
     if(ends.hasNext()) end = ends.next();
-    
+    // 如果存在, 添加关系, 关系方向是 end -> start
     if(null != start && null != end) {
       Edge p = end.addEdge("OWN", start);
+      // 给关系添加属性
       p.property("uid", "uid-" + Long.valueOf(1 << 8).toString());
       p.property("name", "name-" + Long.valueOf(1 << 8).toString());
     }
-    
+    // 提交事务
     g.tx().commit();
+    // 如果还有操作, 需要重新开启事务
     g.tx().open();
+    // 关闭会话
     graphFactory.close();
   }
 
