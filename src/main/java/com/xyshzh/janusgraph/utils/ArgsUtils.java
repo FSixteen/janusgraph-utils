@@ -102,10 +102,8 @@ public class ArgsUtils {
     // 导出数据
     if (options.get("task").equals("export")) {
       // 判断导出类型
-      if ((!options.containsKey("isVertex") && !options.containsKey("isEdge")) // 不包含两个值
-          || (Boolean.valueOf(options.containsKey("isVertex")) && Boolean.valueOf(options.containsKey("isEdge"))) // 包含两个true值
-          || (!Boolean.valueOf(options.containsKey("isVertex")) && !Boolean.valueOf(options.containsKey("isEdge"))) // 包含两个false值
-      ) {
+      if (Boolean.parseBoolean(options.getOrDefault("isVertex", "false")) == Boolean
+          .parseBoolean(options.getOrDefault("isEdge", "false"))) {
         System.out.println("  >>  --isVertex | --isEdge  >>  请选择单一导出方式");
         return showHelp();
       }

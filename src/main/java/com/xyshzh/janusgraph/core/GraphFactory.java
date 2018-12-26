@@ -63,7 +63,7 @@ public final class GraphFactory implements Serializable {
   private void builderConfigByFile(String filePath) {
     InputStream file = null;
     try {
-      file = (null == filePath) ? this.getClass().getResourceAsStream("/janusgarph.property")
+      file = (null == filePath) ? this.getClass().getResourceAsStream("/janusgarph.properties")
           : new FileInputStream(filePath);
     } catch (FileNotFoundException e) {
       e.printStackTrace();

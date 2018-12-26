@@ -1,24 +1,28 @@
 package com.xyshzh.janusgraph.datasource;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Serializable;
+
 /**
  * 数据源为本地文件.
  * @author Shengjun Liu
  * @version 2018-07-20
  *
  */
-public class ReadFile implements Read, java.io.Serializable {
-  
+public class ReadFile implements Read, Serializable {
+
   private static final long serialVersionUID = 294234546449731300L;
-  
-  private java.io.BufferedReader reader = null;
+
+  private BufferedReader reader = null;
 
   public ReadFile(String filepath) {
     try {
-      reader = (null == filepath)
-          ? new java.io.BufferedReader(new java.io.InputStreamReader(this.getClass().getResourceAsStream("/default.txt")))
-          : new java.io.BufferedReader(new java.io.FileReader(filepath));
-    } catch (java.io.FileNotFoundException e) { // 拦截文件异常
-      System.err.println("文件找不到.");
+      reader = new BufferedReader(new FileReader(filepath));
+    } catch (FileNotFoundException e) {
+      System.err.println(filepath + " >> 文件找不到.");
     }
   }
 
@@ -29,7 +33,7 @@ public class ReadFile implements Read, java.io.Serializable {
   public synchronized String readLine() {
     try {
       return reader.readLine();
-    } catch (java.io.IOException e) { // 拦截文件异常
+    } catch (IOException e) {
       System.err.println("文件IO读取异常.");
       return null;
     }
@@ -39,7 +43,7 @@ public class ReadFile implements Read, java.io.Serializable {
   public void close() {
     try {
       reader.close();
-    } catch (java.io.IOException e) {
+    } catch (IOException e) {
       System.err.println("文件IO关闭异常.");
     }
   }

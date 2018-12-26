@@ -1,5 +1,7 @@
 package com.xyshzh.janusgraph.exportdata;
 
+import org.apache.tinkerpop.gremlin.structure.Vertex;
+
 import com.xyshzh.janusgraph.task.Task;
 
 /**
@@ -23,7 +25,8 @@ public class ExportEdge implements Task {
     com.xyshzh.janusgraph.core.GraphFactory graphFactory = new com.xyshzh.janusgraph.core.GraphFactory(); // 创建图数据库连接
     org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g = graphFactory.getG(); // 获取遍历源,判断是否存在使用
     try {
-      org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal<org.apache.tinkerpop.gremlin.structure.Edge, org.apache.tinkerpop.gremlin.structure.Edge> vs = g.E(); // 获取所有关系信息
+      org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal<org.apache.tinkerpop.gremlin.structure.Edge, org.apache.tinkerpop.gremlin.structure.Edge> vs = g
+          .E()/*.hasLabel( "Kinship", "Individual", "Enterprise", "Serve", "Project", "Own", "Payment")*/; // 获取所有关系信息
       try {
         while (vs.hasNext()) { // 如果有下个关系
           org.apache.tinkerpop.gremlin.structure.Edge v = vs.next(); // 获取下一个关系
@@ -38,6 +41,14 @@ public class ExportEdge implements Task {
           prop.put("~outVertexId", id.getOutVertexId()); // 添加起点id
           prop.put("~typeId", id.getTypeId()); // 添加类型id
           prop.put("~label", v.label()); // 添加label
+          Vertex fvid = g.V(id.getOutVertexId()).next();
+          try { prop.put("uid1", fvid.value("uid")); } catch (Exception e) {}
+          try { prop.put("name1", fvid.value("name")); } catch (Exception e) {}
+          try { prop.put("label1", fvid.label()); } catch (Exception e) {}
+          Vertex tvid = g.V(id.getInVertexId()).next();
+          try { prop.put("uid2", tvid.value("uid")); } catch (Exception e) {}
+          try { prop.put("name2", tvid.value("name")); } catch (Exception e) {}
+          try { prop.put("label2", tvid.label()); } catch (Exception e) {}
           writer.writerLine(prop); // 写入到文件中
           total.addAndGet(1); // 写入后,计数加一
           if (total.get() % 400 == 0) { // 每四百次,提示一次

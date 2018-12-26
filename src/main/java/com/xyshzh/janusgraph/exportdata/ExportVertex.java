@@ -24,7 +24,7 @@ public class ExportVertex implements Task {
     org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g = graphFactory.getG(); // 获取遍历源,判断是否存在使用
     try {
       org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal<org.apache.tinkerpop.gremlin.structure.Vertex, org.apache.tinkerpop.gremlin.structure.Vertex> vs = g
-          .V(); // 获取所有节点信息
+          .V()/*.hasLabel("Person", "Company", "Department")*/; // 获取所有节点信息
       try {
         while (vs.hasNext()) { // 如果有下个节点
           org.apache.tinkerpop.gremlin.structure.Vertex v = vs.next(); // 获取下一个节点

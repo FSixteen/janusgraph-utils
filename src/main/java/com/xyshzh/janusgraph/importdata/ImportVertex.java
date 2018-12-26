@@ -12,13 +12,14 @@ import com.xyshzh.janusgraph.task.Task;
  * @version 2018-01-16
  *
  */
-public class ImportVertex implements Task{
-  
+public class ImportVertex implements Task {
+
   public void execute(java.util.HashMap<String, String> options) {
 
     // 试图打开文件,文件使用结束后或出现异常后,在finally内关闭文件
-    com.xyshzh.janusgraph.datasource.Read reader = new com.xyshzh.janusgraph.datasource.ReadFile(
-        options.get("file").toString());
+    com.xyshzh.janusgraph.datasource.Read reader = new com.xyshzh.janusgraph.datasource.ReadFile(options.get("file").toString());
+    
+    reader.init();
 
     if (!reader.check()) { // 检测数据源
       System.out.println("文件异常,请重试.");
@@ -27,16 +28,19 @@ public class ImportVertex implements Task{
 
     java.util.concurrent.atomic.AtomicInteger total = new java.util.concurrent.atomic.AtomicInteger(0); // 计数器
 
-    boolean checkvertex = options.containsKey("checkvertex"); // 检查节点信息是否存在,初次导入可以忽略
+    boolean checkvertex = Boolean.valueOf(options.getOrDefault("checkvertex", "false")); // 检查节点信息是否存在,初次导入可以忽略
 
-    boolean setvertexid = options.containsKey("setvertexid"); // 自定义id
+    boolean setvertexid = Boolean.valueOf(options.getOrDefault("setvertexid", "false")); // 自定义id
 
-    String[] keys = options.containsKey("keys") ? options.get("keys").toString().split(",") : new String[] {}; // 如果不自定义id,则通过这些字段判断节点信息是否存在
+    String[] keys = options.getOrDefault("keys", "").split(","); // 如果不自定义id,则通过这些字段判断节点信息是否存在
 
     try {
       com.xyshzh.janusgraph.core.GraphFactory graphFactory = new com.xyshzh.janusgraph.core.GraphFactory(); // 创建图数据库连接
+      System.out.println("graphFactory 初始化完成......");
       org.janusgraph.core.JanusGraphTransaction tx = graphFactory.getTx(); // 获取新事务,添加节点信息使用
+      System.out.println("tx           初始化完成......");
       org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g = graphFactory.getG(); // 获取遍历源,判断是否存在使用
+      System.out.println("g            初始化完成......");
 
       String tempString = null; // 接收文件中每行数据,使用一变量,不需要重新生成新变量
       while ((tempString = reader.readLine()) != null) {
@@ -47,18 +51,24 @@ public class ImportVertex implements Task{
           try { // 避免Json文件转换异常, 抛弃异常记录
             content = net.sf.json.JSONObject.fromObject(tempString);
           } catch (net.sf.json.JSONException e) {
-            System.out.println(
-                "Current Position >> " + total.get() + " >> tempString :: " + tempString + " >> " + e.getMessage());
+            System.out.println("Current Position >> " + total.get() + " >> tempString :: " + tempString + " >> " + e.getMessage());
             continue;
+          } finally {
+            if (null == content) {
+              System.out.println("Current Position >> " + total.get() + " >> tempString :: " + tempString + " >> Json文件转换异常");
+              continue;
+            }
+          }
+          Long id = null;
+          if (setvertexid) { // 如果id内容为空或小于1,则忽略本条记录
+            id = (content.containsKey("~id") ? content.getLong("~id") : (content.containsKey("id") ? content.getLong("id") : null)); // 获取id信息
+            if ((null == id || 1 > id)) {
+              System.out.println("Current Position >> " + total.get() + " >> id :: " + id + " >> ignore.");
+              continue;
+            }
           }
 
-          Long id = content.containsKey("~id") ? content.getLong("~id") : null; // 获取id信息
-          if (setvertexid && (null == id || 1 > id)) { // 如果id内容为空或小于1,则忽略本条记录
-            System.out.println("Current Position >> " + total.get() + " >> id :: " + id + " >> ignore.");
-            continue;
-          }
-
-          String label = content.containsKey("~label") ? content.getString("~label") : null; // 获取label信息
+          String label = (content.containsKey("~label") ? content.getString("~label") : (content.containsKey("label") ? content.getString("label") : null)); // 获取label信息
           if (null == label || "".equals(label.trim())) { // 如果label内容为空,则忽略本条记录
             System.out.println("Current Position >> " + total.get() + " >> label :: " + label + " >> ignore.");
             continue;
@@ -90,8 +100,7 @@ public class ImportVertex implements Task{
               }
             }
             if (has(g, kvs)) { // 节点信息存在
-              System.out
-                  .println("Current Position >> " + total.get() + " >> keys :: " + kvs.toString() + " >> existed.");
+              System.out.println("Current Position >> " + total.get() + " >> keys :: " + kvs.toString() + " >> existed.");
               continue;
             }
           } else {
@@ -101,31 +110,30 @@ public class ImportVertex implements Task{
 
           try {
             if (setvertexid) { // 生成新Vertex,并指定label,id
-              v = tx.addVertex(org.apache.tinkerpop.gremlin.structure.T.label, label,
-                  org.apache.tinkerpop.gremlin.structure.T.id, id);
+              v = tx.addVertex(org.apache.tinkerpop.gremlin.structure.T.label, label, org.apache.tinkerpop.gremlin.structure.T.id, id);
             } else { // 生成新Vertex,并指定label
               v = tx.addVertex(org.apache.tinkerpop.gremlin.structure.T.label, label);
             }
           } catch (java.lang.IllegalArgumentException e) {
-            System.out.println(
-                "Current Position >> " + total.get() + " >> tempString :: " + tempString + " >> " + e.getMessage());
+            System.out.println("Current Position >> " + total.get() + " >> tempString :: " + tempString + " >> " + e.getMessage());
             System.out.println("请检查JanusGraph配置项: graph.set-vertex-id 是否正常配置. 此值在初始化backend即以成定局, 后期修改均无效.");
             System.out.println("请选择合适的校验方式.");
             System.exit(1);
           }
 
           if (null == v) { // 生成新Vertex异常
-            System.out.println();
+            System.out.println("Current Position >> " + total.get() + " >> tempString :: " + tempString + " >> 生成新Vertex异常");
+            continue;
           }
           // 将数据中的其他字段添加到Vertex
           for (Object key : content.keySet()) {
-            if (key.equals("~id") || key.equals("~label")) { // 忽略id & label
+            if (key.equals("~id") || key.equals("~label") || key.equals("id") || key.equals("label")) { // 忽略~id & ~label & id & label
               continue;
             }
             v.property(key.toString(), content.get(key));
           }
           // 分批次提交,每次提交事务都会关闭,提交后需要重新创建事务
-          if (total.get() % 400 == 0) {
+          if (total.get() % 2000 == 0) {
             try {
               tx.commit();
             } catch (java.lang.Exception e) {
