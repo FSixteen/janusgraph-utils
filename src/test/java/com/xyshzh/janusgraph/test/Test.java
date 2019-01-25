@@ -38,6 +38,21 @@ public class Test {
     System.out.println(System.currentTimeMillis() - s);
     reader.close();
   }
+  
+  @org.junit.Test
+  public void dropE() {
+    com.xyshzh.janusgraph.core.GraphFactory graphFactory = new com.xyshzh.janusgraph.core.GraphFactory(); // 创建图数据库连接
+    org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversalSource g = graphFactory.getG(); // 获取遍历源,判断是否存在使用
+    
+    for (int i = 0; i < 30; i++) {
+      System.out.println(i);
+      g.E().has("type", "Individual").has("sub_money", 0.0).has("rea_money", 0.0).has("present", 0.0).limit(500).drop();
+      g.tx().commit();
+      g.tx().open();
+    }
+    
+    graphFactory.close();
+  }
 
   @org.junit.Test
   public void updateV() {

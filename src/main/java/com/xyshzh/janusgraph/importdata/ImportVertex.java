@@ -18,7 +18,7 @@ public class ImportVertex implements Task {
 
     // 试图打开文件,文件使用结束后或出现异常后,在finally内关闭文件
     com.xyshzh.janusgraph.datasource.Read reader = new com.xyshzh.janusgraph.datasource.ReadFile(options.get("file").toString());
-    
+
     reader.init();
 
     if (!reader.check()) { // 检测数据源
@@ -35,7 +35,7 @@ public class ImportVertex implements Task {
     String[] keys = options.getOrDefault("keys", "").split(","); // 如果不自定义id,则通过这些字段判断节点信息是否存在
 
     try {
-      com.xyshzh.janusgraph.core.GraphFactory graphFactory = new com.xyshzh.janusgraph.core.GraphFactory(); // 创建图数据库连接
+      com.xyshzh.janusgraph.core.GraphFactory graphFactory = new com.xyshzh.janusgraph.core.GraphFactory(options.getOrDefault("conf", null)); // 创建图数据库连接
       System.out.println("graphFactory 初始化完成......");
       org.janusgraph.core.JanusGraphTransaction tx = graphFactory.getTx(); // 获取新事务,添加节点信息使用
       System.out.println("tx           初始化完成......");
@@ -68,7 +68,8 @@ public class ImportVertex implements Task {
             }
           }
 
-          String label = (content.containsKey("~label") ? content.getString("~label") : (content.containsKey("label") ? content.getString("label") : null)); // 获取label信息
+          String label = (content.containsKey("~label") ? content.getString("~label")
+              : (content.containsKey("label") ? content.getString("label") : null)); // 获取label信息
           if (null == label || "".equals(label.trim())) { // 如果label内容为空,则忽略本条记录
             System.out.println("Current Position >> " + total.get() + " >> label :: " + label + " >> ignore.");
             continue;

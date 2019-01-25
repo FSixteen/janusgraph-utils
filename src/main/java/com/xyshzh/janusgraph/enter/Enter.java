@@ -15,15 +15,15 @@ import com.xyshzh.janusgraph.schema.BuildSchema;
 public class Enter {
   public static void main(String[] args) {
 
-    args = new String[] { "--task=schema", "--conf=/Users/liushengjun/workspace/janusgraph-utils_/src/main/resources/janusgarph.properties",
-        "--file=/Users/liushengjun/workspace/schema.json" };
+//    args = new String[] { "--task=schema", "--conf=/Users/liushengjun/workspace/janusgraph-utils_/src/main/resources/janusgarph.properties",
+//        "--file=/Users/liushengjun/workspace/schema.json" };
 
-    args = new String[] { "--task=import", "--conf=/Users/liushengjun/workspace/janusgraph-utils_/src/main/resources/janusgarph.properties",
-        "--type=file", "--file=/Users/liushengjun/Desktop/V_1225.txt", "--setvertexid=false", "--isVertex=true", "--isEdge=false" };
+//    args = new String[] { "--task=import", "--conf=/Users/liushengjun/workspace/janusgraph-utils_/src/main/resources/janusgarph.properties",
+//        "--type=file", "--file=/Users/liushengjun/Desktop/V_1225.txt", "--setvertexid=false", "--isVertex=true", "--isEdge=false" };
 //
-    args = new String[] { "--task=import", "--conf=/Users/liushengjun/workspace/janusgraph-utils_/src/main/resources/janusgarph.properties",
-        "--type=file", "--file=/Users/liushengjun/Desktop/E_1225.txt", "--setvertexid=false", "--isVertex=false", "--isEdge=true",
-        "--fkeys=label1,uid1,name1", "--tkeys=label2,uid2,name2", "--thread=3" };
+//    args = new String[] { "--task=import", "--conf=/Users/liushengjun/workspace/janusgraph-utils_/src/main/resources/janusgarph.properties",
+//        "--type=file", "--file=/Users/liushengjun/Desktop/E_1225.txt", "--setvertexid=false", "--isVertex=false", "--isEdge=true",
+//        "--fkeys=label1,uid1,name1", "--tkeys=label2,uid2,name2", "--thread=3" };
 //
 //    args = new String[] { "--task=export", "--conf=/Users/liushengjun/workspace/janusgraph-utils_/src/main/resources/janusgarph.properties",
 //        "--type=file", "--file=/Users/liushengjun/Desktop/V_1225.txt", "--isVertex=true", "--isEdge=false" };

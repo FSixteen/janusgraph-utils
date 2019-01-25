@@ -54,7 +54,7 @@ public class ImportEdge implements Task {
     filters.addAll(Arrays.asList(tkeys));
 
     try {
-      com.xyshzh.janusgraph.core.GraphFactory graphFactory = new com.xyshzh.janusgraph.core.GraphFactory(); // 创建图数据库连接
+      com.xyshzh.janusgraph.core.GraphFactory graphFactory = new com.xyshzh.janusgraph.core.GraphFactory(options.getOrDefault("conf", null)); // 创建图数据库连接
       System.out.println("----------初始化完成------------");
       for (int i = 0; i < thread; i++) {
         new Thread(new Runnable() {
@@ -164,7 +164,7 @@ public class ImportEdge implements Task {
                         continue;
                       e.property(key.toString(), content.get(key));
                     }
-                    e.property("type", "Statement");
+                    // e.property("type", "Statement");
                     e.property("fvid", startV.id());
                     e.property("tvid", endV.id());
                   } else {
