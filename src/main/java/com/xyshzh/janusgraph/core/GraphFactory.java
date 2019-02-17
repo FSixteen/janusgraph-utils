@@ -43,7 +43,8 @@ public final class GraphFactory implements Serializable {
   }
 
   public GraphTraversalSource getG() {
-    return this.graph.traversal();
+    GraphTraversalSource g = this.graph.traversal();
+    return g;
   }
 
   public JanusGraphTransaction getTx() {

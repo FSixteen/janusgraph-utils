@@ -48,7 +48,6 @@ public class Enter {
     } else if ("import".equals(options.get("task"))) { // 导入
       if (Boolean.valueOf(options.get("isVertex"))) { // 导入点
         new ImportVertex().execute(options);
-        ;
       } else if (Boolean.valueOf(options.get("isEdge"))) { // 导入边
         new ImportEdge().execute(options);
       } else {

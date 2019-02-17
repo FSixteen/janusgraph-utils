@@ -5,12 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-/**
- * 程序入口参数.
+/** 程序入口参数.
  * @author Shengjun Liu
- * @version 2018-12-21
- *
- */
+ * @version 2018-12-21 */
 public class Arguments {
 
   private final static String prefix = "--";
@@ -151,125 +148,123 @@ public class Arguments {
   private void init(HashMap<String, String> options) {
     for (Entry<String, String> entry : options.entrySet()) {
       switch (entry.getKey()) {
-      case "task":
-        this.task = entry.getValue();
-        break;
-      case "conf":
-        this.conf = entry.getValue();
-        break;
-      case "file":
-        this.file = entry.getValue();
-        break;
-      case "thread":
-        this.thread = Integer.parseInt(entry.getValue());
-        break;
-      case "isVertex":
-        this.isVertex = Boolean.parseBoolean(entry.getValue());
-        break;
-      case "isEdge":
-        this.isEdge = Boolean.parseBoolean(entry.getValue());
-        break;
-      case "type":
-        this.type = entry.getValue();
-        break;
-      case "setvertexid":
-        this.setvertexid = Boolean.parseBoolean(entry.getValue());
-        break;
-      case "checkvertex":
-        this.checkvertex = Boolean.parseBoolean(entry.getValue());
-        break;
-      case "checkedge":
-        this.checkedge = Boolean.parseBoolean(entry.getValue());
-        break;
-      case "overwrite":
-        this.overwrite = Boolean.parseBoolean(entry.getValue());
-        break;
-      case "keys":
-        Map<String, String> _keys = new HashMap<>();
-        for (String mapkv : entry.getValue().split(map_split)) {
-          String[] kv = mapkv.split(mapkv_split);
-          if (1 == kv.length) {
-            _keys.put(kv[0].trim(), kv[0].trim());
-          } else if (2 == kv.length) {
-            _keys.put(kv[0].trim(), kv[1].trim());
-          } else {
-            showHelp();
+        case "task":
+          this.task = entry.getValue();
+          break;
+        case "conf":
+          this.conf = entry.getValue();
+          break;
+        case "file":
+          this.file = entry.getValue();
+          break;
+        case "thread":
+          this.thread = Integer.parseInt(entry.getValue());
+          break;
+        case "isVertex":
+          this.isVertex = Boolean.parseBoolean(entry.getValue());
+          break;
+        case "isEdge":
+          this.isEdge = Boolean.parseBoolean(entry.getValue());
+          break;
+        case "type":
+          this.type = entry.getValue();
+          break;
+        case "setvertexid":
+          this.setvertexid = Boolean.parseBoolean(entry.getValue());
+          break;
+        case "checkvertex":
+          this.checkvertex = Boolean.parseBoolean(entry.getValue());
+          break;
+        case "checkedge":
+          this.checkedge = Boolean.parseBoolean(entry.getValue());
+          break;
+        case "overwrite":
+          this.overwrite = Boolean.parseBoolean(entry.getValue());
+          break;
+        case "keys":
+          Map<String, String> _keys = new HashMap<>();
+          for (String mapkv : entry.getValue().split(map_split)) {
+            String[] kv = mapkv.split(mapkv_split);
+            if (1 == kv.length) {
+              _keys.put(kv[0].trim(), kv[0].trim());
+            } else if (2 == kv.length) {
+              _keys.put(kv[0].trim(), kv[1].trim());
+            } else {
+              showHelp();
+            }
           }
-        }
-        this.keys = _keys;
-        break;
-      case "fkeys":
-        Map<String, String> _fkeys = new HashMap<>();
-        for (String mapkv : entry.getValue().split(map_split)) {
-          String[] kv = mapkv.split(mapkv_split);
-          if (1 == kv.length) {
-            _fkeys.put(kv[0].trim(), kv[0].trim());
-          } else if (2 == kv.length) {
-            _fkeys.put(kv[0].trim(), kv[1].trim());
-          } else {
-            showHelp();
+          this.keys = _keys;
+          break;
+        case "fkeys":
+          Map<String, String> _fkeys = new HashMap<>();
+          for (String mapkv : entry.getValue().split(map_split)) {
+            String[] kv = mapkv.split(mapkv_split);
+            if (1 == kv.length) {
+              _fkeys.put(kv[0].trim(), kv[0].trim());
+            } else if (2 == kv.length) {
+              _fkeys.put(kv[0].trim(), kv[1].trim());
+            } else {
+              showHelp();
+            }
           }
-        }
-        this.fkeys = _fkeys;
-        break;
-      case "tkeys":
-        Map<String, String> _tkeys = new HashMap<>();
-        for (String mapkv : entry.getValue().split(map_split)) {
-          String[] kv = mapkv.split(mapkv_split);
-          if (1 == kv.length) {
-            _tkeys.put(kv[0].trim(), kv[0].trim());
-          } else if (2 == kv.length) {
-            _tkeys.put(kv[0].trim(), kv[1].trim());
-          } else {
-            showHelp();
+          this.fkeys = _fkeys;
+          break;
+        case "tkeys":
+          Map<String, String> _tkeys = new HashMap<>();
+          for (String mapkv : entry.getValue().split(map_split)) {
+            String[] kv = mapkv.split(mapkv_split);
+            if (1 == kv.length) {
+              _tkeys.put(kv[0].trim(), kv[0].trim());
+            } else if (2 == kv.length) {
+              _tkeys.put(kv[0].trim(), kv[1].trim());
+            } else {
+              showHelp();
+            }
           }
-        }
-        this.tkeys = _tkeys;
-        break;
-      case "driver":
-        this.driver = entry.getValue();
-        break;
-      case "url":
-        this.url = entry.getValue();
-        break;
-      case "jdbctype":
-        this.jdbctype = entry.getValue();
-        break;
-      case "ip":
-        this.ip = entry.getValue();
-        break;
-      case "port":
-        this.port = entry.getValue();
-        break;
-      case "user":
-        this.user = entry.getValue();
-        break;
-      case "password":
-        this.password = entry.getValue();
-        break;
-      case "table":
-        this.table = entry.getValue();
-        break;
-      case "query":
-        this.query = entry.getValue();
-        break;
-      case "zk":
-        this.zk = entry.getValue();
-        break;
-      case "topic":
-        this.topic = entry.getValue();
-        break;
-      default:
-        showHelp();
-        break;
+          this.tkeys = _tkeys;
+          break;
+        case "driver":
+          this.driver = entry.getValue();
+          break;
+        case "url":
+          this.url = entry.getValue();
+          break;
+        case "jdbctype":
+          this.jdbctype = entry.getValue();
+          break;
+        case "ip":
+          this.ip = entry.getValue();
+          break;
+        case "port":
+          this.port = entry.getValue();
+          break;
+        case "user":
+          this.user = entry.getValue();
+          break;
+        case "password":
+          this.password = entry.getValue();
+          break;
+        case "table":
+          this.table = entry.getValue();
+          break;
+        case "query":
+          this.query = entry.getValue();
+          break;
+        case "zk":
+          this.zk = entry.getValue();
+          break;
+        case "topic":
+          this.topic = entry.getValue();
+          break;
+        default:
+          showHelp();
+          break;
       }
     }
   }
 
-  /**
-   * 校验参数内容
-   * @return true:正常,false:失败
-   */
+  /** 校验参数内容
+   * @return true:正常,false:失败 */
   private boolean check() {
     // 校验任务类型是否正常
     if (null == this.task || !Arrays.asList(this.tasks).contains(this.task)) showHelp();

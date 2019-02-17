@@ -1,22 +1,16 @@
 package com.xyshzh.janusgraph.datasource;
 
-/**
- * 数据源为JDBC.
+/** 数据源为JDBC.
  * @author Shengjun Liu
- * @version 2018-07-20
- *
- */
+ * @version 2018-07-20 */
 public class ReadJdbc implements Read, java.io.Serializable {
 
   private static final long serialVersionUID = -3033449241202336863L;
-  
-  public ReadJdbc() {
-  }
+
+  public ReadJdbc() {}
 
   @Override
-  public void init() {
-
-  }
+  public void init() {}
 
   @Override
   public String readLine() {
@@ -24,9 +18,10 @@ public class ReadJdbc implements Read, java.io.Serializable {
   }
 
   @Override
-  public void close() {
+  public void commitOffset() {}
 
-  }
+  @Override
+  public void close() {}
 
   @Override
   public boolean check() {

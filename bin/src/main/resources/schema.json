@@ -1,0 +1,21 @@
+{ "props": [
+    { "name": "uid", "type": "String"}, 
+    { "name": "name", "type": "String"}]
+  , "vertices": [
+    { "name": "Person"}, 
+    { "name": "Company"}, 
+    { "name": "Department"}]
+  , "edges": [
+    { "name": "OWN"}, 
+    { "name": "PAYMENT"}, 
+    { "name": "SERVE"}]
+  , "indexes": [
+    { "name": "all_vertex1", "type": "Vertex", "props": [
+        { "name": "uid", "mapping": "TEXTSTRING"}, 
+        { "name": "name", "mapping": "TEXTSTRING"}]
+      , "uniqueIndex": false, "compositeIndex": false, "mixedIndex": true, "mixedIndexName": "search"}, 
+    { "name": "all_edge1", "type": "Edge", "props": [
+        { "name": "uid", "mapping": "TEXTSTRING"}, 
+        { "name": "name", "mapping": "TEXTSTRING"}]
+      , "uniqueIndex": false, "compositeIndex": false, "mixedIndex": true, "mixedIndexName": "search"}]
+}

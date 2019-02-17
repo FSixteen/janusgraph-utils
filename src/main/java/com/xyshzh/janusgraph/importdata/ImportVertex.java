@@ -35,7 +35,8 @@ public class ImportVertex implements Task {
     String[] keys = options.getOrDefault("keys", "").split(","); // 如果不自定义id,则通过这些字段判断节点信息是否存在
 
     try {
-      com.xyshzh.janusgraph.core.GraphFactory graphFactory = new com.xyshzh.janusgraph.core.GraphFactory(options.getOrDefault("conf", null)); // 创建图数据库连接
+      com.xyshzh.janusgraph.core.GraphFactory graphFactory = new com.xyshzh.janusgraph.core.GraphFactory(
+          options.containsKey("conf") ? options.get("conf") : null); // 创建图数据库连接
       System.out.println("graphFactory 初始化完成......");
       org.janusgraph.core.JanusGraphTransaction tx = graphFactory.getTx(); // 获取新事务,添加节点信息使用
       System.out.println("tx           初始化完成......");
@@ -134,7 +135,7 @@ public class ImportVertex implements Task {
             v.property(key.toString(), content.get(key));
           }
           // 分批次提交,每次提交事务都会关闭,提交后需要重新创建事务
-          if (total.get() % 2000 == 0) {
+          if (total.get() % 1000 == 0) {
             try {
               tx.commit();
             } catch (java.lang.Exception e) {

@@ -1,0 +1,9 @@
+.settings
+.tmpBin
+.cache-main
+.checkstyle
+.classpath
+.project
+target/
+src/main/resources/janusgarph.property
+*.txt
