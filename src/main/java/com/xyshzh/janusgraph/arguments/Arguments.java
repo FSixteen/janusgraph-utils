@@ -36,12 +36,48 @@ public class Arguments {
         System.exit(1);
       }
     } else if (commonOptions.isImport()) {
-
+      importOptions = new ImportOptions(this.commonOptions.getOptions());
+      if (!importOptions.check()) {
+        this.importOptions.printError();
+        System.out.println("--------------------------------------------------\n");
+        this.importOptions.printRole();
+        System.exit(1);
+      }
     } else if (commonOptions.isExport()) {
-
+      exportOptions = new ExportOptions(this.commonOptions.getOptions());
+      if (!exportOptions.check()) {
+        this.exportOptions.printError();
+        System.out.println("--------------------------------------------------\n");
+        this.exportOptions.printRole();
+        System.exit(1);
+      }
     } else {
       System.exit(1);
     }
+  }
+
+  public boolean isSchema() {
+    return commonOptions.isSchema();
+  }
+
+  public boolean isImport() {
+    return commonOptions.isImport();
+  }
+
+  public boolean isExport() {
+    return commonOptions.isExport();
+  }
+
+  public SchemaOptions getSchemaOptions() {
+    return schemaOptions;
+  }
+
+  public ImportOptions getImportOptions() {
+    return importOptions;
+  }
+
+  public ExportOptions getExportOptions() {
+    return exportOptions;
   }
 
 }
