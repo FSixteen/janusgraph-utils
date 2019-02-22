@@ -21,10 +21,10 @@ import com.xyshzh.janusgraph.task.Task;
  */
 public class ImportEdge implements Task {
 
-  public void execute(java.util.HashMap<String, String> options) {
+  public void execute(java.util.Map<String, String> options) {
 
     // 试图打开文件,文件使用结束后或出现异常后,在finally内关闭文件
-    com.xyshzh.janusgraph.datasource.Read reader = new com.xyshzh.janusgraph.datasource.ReadFile(options.get("file").toString());
+    com.xyshzh.janusgraph.datasource.read.Read reader = new com.xyshzh.janusgraph.datasource.read.ReadFile(options.get("file").toString());
 
     if (!reader.check()) { // 检测数据源
       System.out.println("文件异常,请重试.");

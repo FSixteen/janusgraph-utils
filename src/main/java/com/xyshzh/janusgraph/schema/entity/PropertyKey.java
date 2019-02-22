@@ -9,7 +9,6 @@ import com.xyshzh.janusgraph.schema.enuminfo.DataType;
  * schema中PropertyKey实体信息.
  * @author Shengjun Liu
  * @version 2018-07-25
- *
  */
 public class PropertyKey implements Serializable {
 

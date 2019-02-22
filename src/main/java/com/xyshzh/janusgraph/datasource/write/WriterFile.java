@@ -1,4 +1,4 @@
-package com.xyshzh.janusgraph.datasource;
+package com.xyshzh.janusgraph.datasource.write;
 
 /**
  * 数据目标为本地文件.

@@ -1,4 +1,4 @@
-package com.xyshzh.janusgraph.datasource;
+package com.xyshzh.janusgraph.datasource.write;
 
 /**
  * 数据目标通用接口,子类可包含${WriterFile},${WriterJdbc}等等.

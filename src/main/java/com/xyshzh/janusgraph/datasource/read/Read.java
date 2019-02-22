@@ -1,24 +1,21 @@
-package com.xyshzh.janusgraph.datasource;
+package com.xyshzh.janusgraph.datasource.read;
 
-/** 数据源通用接口,子类可包含${ReadFile},${ReadJdbc}等等.
+/** 数据源通用读取接口,子类可包含${ReadFile},${ReadJdbc}等等.
  * @author Shengjun Liu
  * @version 2018-07-20 */
-public interface Read {
+public interface Read extends java.io.Serializable {
 
   /** 退出 */
   public static final String EXIT = "EXIT";
 
-  /** 空置 */
-  public static final String NULL = "NULL";
-
   /** 初始化 */
-  void init();
+  Read init();
 
-  /** 按行读,为null结束 */
+  /** 按行读,为EXIT结束 */
   String readLine();
 
   /** 提交偏移量 */
-  void commitOffset();
+  <T> T commitOffset();
 
   /** 关闭数据源 */
   void close();

@@ -13,7 +13,7 @@ import com.xyshzh.janusgraph.task.Task;
  * @version 2018-01-16
  *
  */
-public class ImportVertex implements Task {
+public class ImportVertexNoCheckID implements Task {
 
   public void execute(java.util.Map<String, String> options) {
 

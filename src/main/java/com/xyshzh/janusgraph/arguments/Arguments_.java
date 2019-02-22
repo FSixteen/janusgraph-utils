@@ -1,4 +1,4 @@
-package com.xyshzh.janusgraph.parameter.entity;
+package com.xyshzh.janusgraph.arguments;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 /** 程序入口参数.
  * @author Shengjun Liu
  * @version 2018-12-21 */
-public class Arguments {
+public class Arguments_ {
 
   private final static String prefix = "--";
   private final static String kv_split = "=";
@@ -62,7 +62,7 @@ public class Arguments {
   private String zk = null;
   private String topic = null;
 
-  public Arguments(String[] args) {
+  public Arguments_(String[] args) {
     HashMap<String, String> options = new HashMap<>();
     boolean check = true;
     for (int i = 0; null != args && i < args.length; i++) {
