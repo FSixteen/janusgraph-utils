@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 /** 数据源通用读取接口,数据源为本地文件.
@@ -22,6 +23,10 @@ public class ReadFile implements Read {
    * 已读偏移量.
    */
   private AtomicLong offset = new AtomicLong(0);
+
+  public ReadFile(Map<String, Object> options) {
+    this(String.class.cast(options.get("file")));
+  }
 
   public ReadFile(String filepath) {
     try {

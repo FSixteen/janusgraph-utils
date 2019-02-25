@@ -33,6 +33,7 @@ public class Arguments2Map {
 
   public Arguments2Map(String[] args) {
     this.reset(args);
+    this.print();
   }
 
   /**
@@ -117,6 +118,14 @@ public class Arguments2Map {
     System.out.println("参数的KV分割以'" + kv_split + "'间隔. ");
     System.out.println("当参数值为基本数据类型集合是, 值与值之间通过'" + value_split + "'间隔.");
     System.out.println("当参数值为基本KV类型集合是, 值与值之间通过'" + value_kv_split + "'间隔, KV对之间通过'" + value_split + "'间隔.");
+    System.out.println("--------------------------------------------------\n");
+  }
+
+  /**
+   * 打印.
+   */
+  public void print() {
+    options.forEach((k, v) -> System.out.println(k + " : " + v));
     System.out.println("--------------------------------------------------\n");
   }
 

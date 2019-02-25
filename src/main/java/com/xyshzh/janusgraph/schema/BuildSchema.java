@@ -25,12 +25,13 @@ import com.xyshzh.janusgraph.task.Task;
  *
  */
 public class BuildSchema implements Task {
-  public void execute(java.util.Map<String, String> options) {
+  public void execute(java.util.Map<String, Object> options) {
     com.xyshzh.janusgraph.core.GraphFactory graphFactory = new com.xyshzh.janusgraph.core.GraphFactory(); // 创建图数据库连接
     JanusGraphManagement mgmt = graphFactory.getGraph().openManagement(); // 获取管理入口
     try {
 
-      Schema schema = new GsonBuilder().disableHtmlEscaping().create().fromJson(new FileReader(options.get("file")), Schema.class);
+      Schema schema = new GsonBuilder().disableHtmlEscaping().create().fromJson(new FileReader(String.class.cast(options.get("file"))),
+          Schema.class);
 
       // 初始化属性
       System.out.println("开始初始化属性信息...");

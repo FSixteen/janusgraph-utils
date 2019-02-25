@@ -7,5 +7,5 @@ package com.xyshzh.janusgraph.task;
  *
  */
 public interface Task {
-  public void execute(java.util.Map<String, String> options);
+  public void execute(java.util.Map<String, Object> options);
 }

@@ -1,6 +1,7 @@
 package com.xyshzh.janusgraph.importdata;
 
 import com.xyshzh.janusgraph.datasource.read.Read;
+import com.xyshzh.janusgraph.datasource.read.ReadFactory;
 import com.xyshzh.janusgraph.task.Task;
 
 /**
@@ -15,10 +16,10 @@ import com.xyshzh.janusgraph.task.Task;
  */
 public class ImportVertexNoCheckID implements Task {
 
-  public void execute(java.util.Map<String, String> options) {
+  public void execute(java.util.Map<String, Object> options) {
 
     // 试图打开文件,文件使用结束后或出现异常后,在finally内关闭文件
-    Read reader = new com.xyshzh.janusgraph.datasource.read.ReadFile(options.get("file").toString()).init();
+    Read reader = ReadFactory.getRead(options).init();
 
     if (!reader.check()) { // 检测数据源
       System.out.println("文件异常,请重试.");
@@ -27,15 +28,15 @@ public class ImportVertexNoCheckID implements Task {
 
     java.util.concurrent.atomic.AtomicInteger total = new java.util.concurrent.atomic.AtomicInteger(0); // 计数器
 
-    boolean checkvertex = Boolean.valueOf(options.getOrDefault("checkvertex", "false")); // 检查节点信息是否存在,初次导入可以忽略
+    boolean checkvertex = Boolean.valueOf(String.class.cast(options.getOrDefault("checkvertex", "false"))); // 检查节点信息是否存在,初次导入可以忽略
 
-    boolean setvertexid = Boolean.valueOf(options.getOrDefault("setvertexid", "false")); // 自定义id
+    boolean setvertexid = Boolean.valueOf(String.class.cast(options.getOrDefault("setvertexid", "false"))); // 自定义id
 
-    String[] keys = options.getOrDefault("keys", "").split(","); // 如果不自定义id,则通过这些字段判断节点信息是否存在
+    String[] keys = (String[]) options.getOrDefault("keys", new String[] {}); // 如果不自定义id,则通过这些字段判断节点信息是否存在
 
     try {
       com.xyshzh.janusgraph.core.GraphFactory graphFactory = new com.xyshzh.janusgraph.core.GraphFactory(
-          options.containsKey("conf") ? options.get("conf") : null); // 创建图数据库连接
+          String.class.cast(options.getOrDefault("conf", null))); // 创建图数据库连接
       System.out.println("graphFactory 初始化完成......");
       org.janusgraph.core.JanusGraphTransaction tx = graphFactory.getTx(); // 获取新事务,添加节点信息使用
       System.out.println("tx           初始化完成......");

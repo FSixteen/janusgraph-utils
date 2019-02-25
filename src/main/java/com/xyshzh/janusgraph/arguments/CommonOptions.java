@@ -2,6 +2,7 @@ package com.xyshzh.janusgraph.arguments;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class CommonOptions {
@@ -65,7 +66,7 @@ public class CommonOptions {
     if ("export".equals(this.options.getOptions())) { return true; }
     return false;
   }
-  
+
   /**
    * 获取处理状态.
    * @return
@@ -81,6 +82,15 @@ public class CommonOptions {
    */
   public Arguments2Map getOptions() {
     return this.options;
+  }
+
+  /**
+   * 获取参数化Map.
+   * @return 
+   * @return
+   */
+  public Map<String, Object> getOptionsMap() {
+    return this.options.getOptions();
   }
 
   /**

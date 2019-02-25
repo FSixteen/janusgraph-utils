@@ -28,24 +28,24 @@ public class Arguments {
 
     // 根据功能判断功能参数正确性
     if (commonOptions.isSchema()) {
-      schemaOptions = new SchemaOptions(this.commonOptions.getOptions());
-      if (!schemaOptions.check()) {
+      this.schemaOptions = new SchemaOptions(this.commonOptions.getOptions());
+      if (!this.schemaOptions.check()) {
         this.schemaOptions.printError();
         System.out.println("--------------------------------------------------\n");
         this.schemaOptions.printRole();
         System.exit(1);
       }
     } else if (commonOptions.isImport()) {
-      importOptions = new ImportOptions(this.commonOptions.getOptions());
-      if (!importOptions.check()) {
+      this.importOptions = new ImportOptions(this.commonOptions.getOptions());
+      if (!this.importOptions.check()) {
         this.importOptions.printError();
         System.out.println("--------------------------------------------------\n");
         this.importOptions.printRole();
         System.exit(1);
       }
     } else if (commonOptions.isExport()) {
-      exportOptions = new ExportOptions(this.commonOptions.getOptions());
-      if (!exportOptions.check()) {
+      this.exportOptions = new ExportOptions(this.commonOptions.getOptions());
+      if (!this.exportOptions.check()) {
         this.exportOptions.printError();
         System.out.println("--------------------------------------------------\n");
         this.exportOptions.printRole();
@@ -54,30 +54,36 @@ public class Arguments {
     } else {
       System.exit(1);
     }
+    
+    this.commonOptions.printRole();
   }
 
   public boolean isSchema() {
-    return commonOptions.isSchema();
+    return this.commonOptions.isSchema();
   }
 
   public boolean isImport() {
-    return commonOptions.isImport();
+    return this.commonOptions.isImport();
   }
 
   public boolean isExport() {
-    return commonOptions.isExport();
+    return this.commonOptions.isExport();
+  }
+
+  public CommonOptions getCommonOptions() {
+    return this.commonOptions;
   }
 
   public SchemaOptions getSchemaOptions() {
-    return schemaOptions;
+    return this.schemaOptions;
   }
 
   public ImportOptions getImportOptions() {
-    return importOptions;
+    return this.importOptions;
   }
 
   public ExportOptions getExportOptions() {
-    return exportOptions;
+    return this.exportOptions;
   }
 
 }

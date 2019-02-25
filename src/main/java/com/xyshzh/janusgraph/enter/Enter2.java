@@ -13,7 +13,7 @@ import com.xyshzh.janusgraph.schema.BuildSchema;
  * @version 2018-07-26
  *
  */
-public class Enter {
+public class Enter2 {
   public static void main(String[] args) {
 
     //    args = new String[] { "--task=schema", "--conf=/Users/liushengjun/workspace/janusgraph-utils_/src/main/resources/janusgarph.properties",

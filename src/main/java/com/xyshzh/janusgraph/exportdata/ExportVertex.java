@@ -9,10 +9,11 @@ import com.xyshzh.janusgraph.task.Task;
  *
  */
 public class ExportVertex implements Task {
-  public void execute(java.util.Map<String, String> options) {
+  public void execute(java.util.Map<String, Object> options) {
 
     // 试图打开文件,文件使用结束后或出现异常后,在finally内关闭文件
-    com.xyshzh.janusgraph.datasource.write.WriterFile writer = new com.xyshzh.janusgraph.datasource.write.WriterFile(options.get("file"));
+    com.xyshzh.janusgraph.datasource.write.WriterFile writer = new com.xyshzh.janusgraph.datasource.write.WriterFile(
+        String.class.cast(options.get("file")));
 
     if (!writer.check()) { // 检测数据源
       System.out.println("文件异常,请重试.");

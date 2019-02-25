@@ -11,10 +11,11 @@ import com.xyshzh.janusgraph.task.Task;
  *
  */
 public class ExportEdge implements Task {
-  public void execute(java.util.Map<String, String> options) {
+  public void execute(java.util.Map<String, Object> options) {
 
     // 试图打开文件,文件使用结束后或出现异常后,在finally内关闭文件
-    com.xyshzh.janusgraph.datasource.write.WriterFile writer = new com.xyshzh.janusgraph.datasource.write.WriterFile(options.get("file"));
+    com.xyshzh.janusgraph.datasource.write.WriterFile writer = new com.xyshzh.janusgraph.datasource.write.WriterFile(
+        String.class.cast(options.get("file")));
 
     if (!writer.check()) { // 检测数据源
       System.out.println("文件异常,请重试.");
@@ -34,21 +35,32 @@ public class ExportEdge implements Task {
           for (String key : v.keys()) { // 处理所有属性
             prop.put(key, v.value(key));
           }
-          org.janusgraph.graphdb.relations.RelationIdentifier id = (org.janusgraph.graphdb.relations.RelationIdentifier) v
-              .id();
+          org.janusgraph.graphdb.relations.RelationIdentifier id = (org.janusgraph.graphdb.relations.RelationIdentifier) v.id();
           prop.put("~relationId", id.getRelationId()); // 添加关系id
           prop.put("~inVertexId", id.getInVertexId()); // 添加终点id
           prop.put("~outVertexId", id.getOutVertexId()); // 添加起点id
           prop.put("~typeId", id.getTypeId()); // 添加类型id
           prop.put("~label", v.label()); // 添加label
           Vertex fvid = g.V(id.getOutVertexId()).next();
-          try { prop.put("uid1", fvid.value("uid")); } catch (Exception e) {}
-          try { prop.put("name1", fvid.value("name")); } catch (Exception e) {}
-          try { prop.put("label1", fvid.label()); } catch (Exception e) {}
+          try {
+            prop.put("uid1", fvid.value("uid"));
+          } catch (Exception e) {}
+          try {
+            prop.put("name1", fvid.value("name"));
+          } catch (Exception e) {}
+          try {
+            prop.put("label1", fvid.label());
+          } catch (Exception e) {}
           Vertex tvid = g.V(id.getInVertexId()).next();
-          try { prop.put("uid2", tvid.value("uid")); } catch (Exception e) {}
-          try { prop.put("name2", tvid.value("name")); } catch (Exception e) {}
-          try { prop.put("label2", tvid.label()); } catch (Exception e) {}
+          try {
+            prop.put("uid2", tvid.value("uid"));
+          } catch (Exception e) {}
+          try {
+            prop.put("name2", tvid.value("name"));
+          } catch (Exception e) {}
+          try {
+            prop.put("label2", tvid.label());
+          } catch (Exception e) {}
           writer.writerLine(prop); // 写入到文件中
           total.addAndGet(1); // 写入后,计数加一
           if (total.get() % 400 == 0) { // 每四百次,提示一次
